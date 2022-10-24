@@ -1,0 +1,49 @@
+{% extends 'base_register.html' %}
+{% block title %}
+{{title}}
+{% endblock %}
+
+
+{% block content %}
+
+{% if form.errors %}
+<p>Ваше имя пользователя и пароль не совпадают. Пожалуйста, попробуйте еще раз.</p>
+{% endif %}
+
+<form method="post" action="{% url 'login' %}">
+    {% csrf_token %}
+    <div class="col-md-12 offset-md-2">
+        <div class="row">
+
+            <div class="form-group">
+
+                <table>
+                    <tr>
+                        <td><h3 class="title">Журнал заданий</h3></td>
+                    </tr>
+                    <tr>
+                        <td>{{ form.username.label_tag }}</td>
+                    </tr>
+                    <tr>
+                        <td>{{ form.username }}</td>
+                    </tr>
+                    <tr>
+                        <td>{{ form.password.label_tag }}</td>
+                    </tr>
+                    <tr>
+                        <td>{{ form.password }}</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <br>
+                            <input class="btn btn-primary" type="submit" value="Вход"/>
+                            <input class="btn btn-primary" type="hidden" name="next" value="{{ next }}"/>
+                        </td>
+                    </tr>
+                </table>
+
+            </div>
+        </div>
+    </div>
+</form>
+{% endblock %}

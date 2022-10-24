@@ -1,0 +1,120 @@
+{% extends 'base_boss.html' %}
+{% block title %}
+{{title}}
+{% endblock %}
+
+{% block sidebar %}
+{% include 'inc/_sidebar.html' %}
+{% endblock %}
+
+{% block content %}
+
+
+<div class="container-float mt-2">
+    <div class="row">
+        <div class="col-md-10">
+            <h2 align="center">Страница руководителя группы</h2>
+        </div>
+        <div class="col-md-2" >
+            <a href="{% url 'add_news'%}" name="marker" class="btn btn-success bi-plus-lg"><span></span>Добавить новость</a>
+        </div>
+    </div>
+</div>
+<br>
+<div class="container-fluid">
+    <table class="table table-bordered table-hover">
+        <thead>
+        <tr>
+            <th scope="col">Новость</th>
+            <th scope="col">Содержание</th>
+            <th scope="col">Дата публикации</th>
+            <th scope="col">Ознакомленные пользователи</th>
+            <th scope="col">Не ознакомленные пользователи</th>
+        </tr>
+        </thead>
+        {% load custom_tags %}
+        {% for new in news reversed %}
+
+        {% for key in new %}
+
+        <tbody>
+        <tr>
+            <th scope="row">
+                {{ key }}
+            </th>
+            <td>
+                {% csrf_token %}
+                <div align="center">
+                    <a class="btn btn-secondary bi-card-text" data-toggle="modal"
+                       data-target="#NewsView{{ key.pk }}"></a>
+                </div>
+                <div class="modal fade" id="NewsView{{ key.pk }}" tabindex="-1" role="dialog"
+                     aria-labelledby="exampleModalLabel"
+                     aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel">{{ key }}</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="container">
+                                    {% if key.photo %}
+                                    <div align="center">
+                                        <img src="{{ key.photo.url }}" alt="" width="350" class="mr-3">
+                                    </div>
+                                    {% endif %}
+                                    <div class="media-body mt-4">
+                                        {{ key.content }}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <a href="{% url 'updated_news' key.pk %}" name="marker"
+                                   class="btn btn-primary">Редактировать</a>
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal" aria-label="Close">
+                                    Закрыть
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </td>
+            <td>{{ key.created_at }}</td>
+            <td>
+                {% for item in new|get_item:key %}
+                {% for i in item %}
+                {% if i == "Никто не ознакомился!" %}
+                <i style="color:red; font-size:20px; font-weight: bold;"> {{ i }}</i>
+                {% else %}
+                {{ i }}
+                {% endif %}
+                {% endfor %}
+                {% endfor %}
+            </td>
+            <td>
+                {% for key, value in new.items %}
+                {% for key, value in value.items %}
+                {% for i in value %}
+                {% if i == "Все ознакомились!" %}
+                <i style="color:green; font-size:20px; font-weight: bold;"> {{ i }}</i>
+                {% else %}
+                {{ i }}
+                {% endif %}
+                {% endfor %}
+                {% endfor %}
+                {% endfor %}
+            </td>
+        </tr>
+        {% endfor %}
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<!-- Modal -->
+
+
+{% endblock %}

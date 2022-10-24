@@ -1,0 +1,43 @@
+{% extends 'base_archive.html' %}
+{% block title %}
+Архив
+{% endblock %}
+
+{% block sidebar %}
+{% include 'inc/_sidebar_archive.html' %}
+
+{% endblock %}
+
+
+{% block content %}
+
+<h1>Страница архива</h1>
+
+{% for item in news reversed %}
+<div class="card mb-3">
+    <h5 class="card-header">
+<!--        Категория: <a href="{{ item.category.get_absolute_url }}">{{ item.category.title }}</a>-->
+        Категория: {{ item.category.title }}
+    </h5>
+    <div class="card-body">
+
+        <div class="media">
+            {% if item.photo %}
+            <img src="{{ item.photo.url }}" alt="" width="350" class="mr-3">
+            {% endif %}
+            <div class="media-body">
+                <h5 class="card-title">{{ item.title }}</h5>
+                <p class="card-text">{{ item.content|linebreaks|truncatewords:50 }}</p>
+                <a href="{% url 'view_news_archive' item.pk %}" class="btn btn-primary">Подробнее...</a>
+            </div>
+        </div>
+    </div>
+    <div class="card-footer text-muted">
+        {{ item.created_at|date:"d.m.Y H:i" }}
+    </div>
+</div>
+{% empty %}
+<li>Упс, новостей нет</li>
+{% endfor %}
+
+{% endblock %}

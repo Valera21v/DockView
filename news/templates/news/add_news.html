@@ -1,0 +1,78 @@
+{% extends 'base_boss.html' %}
+{% block title %}
+{{title}}
+{% endblock %}
+
+{% block sidebar %}
+{% include 'inc/_sidebar.html' %}
+{% endblock %}
+
+{% block content %}
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-2">
+            <a href="{% url 'home' %}" class="btn btn-primary bi-caret-left-fill">Вернуться</a>
+        </div>
+        <div class="col-md-8">
+            <h1 align="center">Добавление новости</h1>
+
+            <form action="{% url 'add_news' %}" method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+
+                {% for field in form %}
+                <div class="form-group">
+                    {{ field.label_tag }}
+                    {{ field }}
+                    <div class="invalid-feedback">
+                        {{ field.errors }}
+                    </div>
+                </div>
+                {% endfor %}
+                <button type="button" class="btn btn-secondary btn-sm" data-toggle="modal"
+                        data-target="#CreatedCategory">
+                    Создать новую категорию
+                </button>
+                <br><br>
+                <button type="submit" class="btn btn-primary btn-block">Добавить новость</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+<!-- Modal -->
+<div class="modal fade" id="CreatedCategory" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Добавление новых категорий</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form action="{% url 'add_news' %}" method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+
+                    {% for field in form_cat %}
+                    <div class="form-group">
+                        {{ field.label_tag }}
+                        {{ field }}
+                        <div class="invalid-feedback">
+                            {{ field.errors }}
+                        </div>
+                    </div>
+                    {% endfor %}
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Отмена</button>
+                        <button type="submit" class="btn btn-primary">Создать категорию</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
